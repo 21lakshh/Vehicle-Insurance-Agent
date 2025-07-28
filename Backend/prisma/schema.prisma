@@ -16,12 +16,11 @@ datasource db {
 
 model User {
   id                String   @id @default(uuid())
-  name              String
-  preferredlanguage String
-  interestScore     Float
-  Sentiment         String
-  phoneNumber       String
-  callduration      Int
+  name              String   @default("")
+  preferredlanguage String   @default("")
+  interestScore     Float    @default(0)
+  Sentiment         String   @default("")
+  phoneNumber       String   @default("")
+  callduration      Int      @default(0)
   createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
 }
