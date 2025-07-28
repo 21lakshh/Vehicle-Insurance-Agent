@@ -23,5 +23,5 @@ model User {
   phoneNumber       String   @default("")
   callduration      Int      @default(0)
   createdAt         DateTime @default(now())
-  car_details       Json     @default("{}")
+  car_details       String   @default("")
 }
