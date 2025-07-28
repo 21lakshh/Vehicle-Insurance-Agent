@@ -11,7 +11,13 @@ const userSchema = z.object({
     interestScore: z.number().min(1).max(10),
     Sentiment: z.string().min(1),
     phoneNumber: z.string().min(1),
-    callduration: z.number().min(1)
+    callduration: z.number().min(1),
+    car_details: z.object({
+        manufacturer: z.string().min(1).optional(),
+        model: z.string().min(1).optional(),
+        variant: z.string().min(1).optional(),
+        year: z.number().min(1).optional()
+    })
 })
 
 userRouter.get('/all', async (c) => {
