@@ -132,7 +132,7 @@ async def entrypoint(ctx: agents.JobContext):
 
     await session.generate_reply(
         instructions="""
-        नमस्ते! मैं प्रिया बोल रही हूँ SecureWheels Insurance से।
+        नमस्ते! मैं प्रिया बोल रही हूँ
         आप हिंदी में बात करना चाहेंगे या English में?
         मैं आपको vehicle insurance के बारे में कुछ बहुत अच्छी जानकारी देना चाहती हूँ।
         """
