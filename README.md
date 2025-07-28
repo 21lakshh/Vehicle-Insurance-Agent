@@ -242,53 +242,10 @@ npm run dev
 python agent.py
 ```
 
-## 📊 Database Schema
-
-### **PostgreSQL Schema (User Data)**
-```sql
-model User {
-  id                String   @id @default(uuid())
-  name              String   @default("")
-  preferredlanguage String   @default("")
-  interestScore     Float    @default(0)
-  Sentiment         String   @default("")
-  phoneNumber       String   @default("")
-  callduration      Int      @default(0)
-  createdAt         DateTime @default(now())
-  car_details       Json     @default("{}")
-}
-```
-
-### **Neo4j Graph Schema**
-```cypher
-// Nodes
-(:Vehicle {manufacturer, model_name, variant_name, ...})
-(:Manufacturer {name})
-(:BodyType {name})
-(:FuelType {name})
-(:Feature {name})
-
-// Relationships
-(Vehicle)-[:MANUFACTURED_BY]->(Manufacturer)
-(Vehicle)-[:HAS_BODY_TYPE]->(BodyType)
-(Vehicle)-[:USES_FUEL]->(FuelType)
-(Vehicle)-[:HAS_FEATURE]->(Feature)
-```
 
 ## 🧠 Graph RAG in Action
 
 ### **Real-time Car Query Processing**
-During any conversation, when users mention or ask about car details:
-
-```cypher
-// Example: User asks "What's the mileage of my Tata Nexon?"
-MATCH (v:Vehicle {manufacturer: "Tata", model_name: "Nexon"})
-RETURN v.mileage_kmpl, v.fuel_type, v.variant_name
-
-// Example: "Which cars have 5-star safety rating?"
-MATCH (v:Vehicle {safety_rating: "5 Star"})
-RETURN v.manufacturer, v.model_name, v.variant_name
-```
 
 The Neo4j Graph RAG enables:
 - **Instant Answers**: Sub-second response to car specification queries
@@ -341,33 +298,7 @@ Agent: "The Tata Nexon offers excellent mileage! The petrol variant gives 17.57 
 - **Total Models**: 200+ different car models
 - **Data Points**: 15+ attributes per vehicle
 - **Coverage**: Complete specifications, pricing, features
-- **Source**: CarDekho.com (real-time market data)
-
-## 🔧 API Endpoints
-
-### **User Management**
-```typescript
-GET  /api/user/all        # Get all users
-POST /api/user/create     # Create new user record
-```
-
-### **Request/Response Format**
-```json
-{
-  "name": "John Doe",
-  "preferredlanguage": "English",
-  "interestScore": 8,
-  "Sentiment": "Positive",
-  "phoneNumber": "+91-9876543210",
-  "callduration": 420,
-  "car_details": {
-    "manufacturer": "Tata",
-    "model": "Nexon",
-    "variant": "XZ Plus",
-    "year": 2025
-  }
-}
-```
+- **Source**: CarDekho.com 
 
 ## 🎨 Graph Visualizations
 
@@ -375,40 +306,3 @@ The project includes Neo4j graph visualizations showing:
 
 1. **Graph Structure** (`graph1.png`): Overall node relationships and data model
 2. **Vehicle Connections** (`graph2.png`): How vehicles connect to features, manufacturers, and specifications
-
-## 🚀 Deployment
-
-### **Backend (Cloudflare Workers)**
-```bash
-cd Backend
-npm run deploy
-```
-
-### **Agent (Local/Server)**
-```bash
-python agent.py
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Support
-
-For questions or issues:
-1. Check the documentation above
-2. Review the code comments
-3. Open an issue in the repository
-4. Contact the development team
-
----
-
-Built with ❤️ using LiveKit, Neo4j, and modern AI technologies 
