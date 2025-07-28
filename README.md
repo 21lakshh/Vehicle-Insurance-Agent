@@ -35,7 +35,7 @@ graph TB
     H --> I[CSV Data Files]
     I --> E
     
-    E --> J[Graph RAG Retrieval]
+    E --> J[Real-time Graph RAG Queries]
     J --> B
     
     F --> K[Cloudflare Workers API]
@@ -69,7 +69,7 @@ graph TB
 - **Database**: Neo4j Graph Database
 - **Structure**: Vehicle nodes connected to Manufacturer, BodyType, FuelType, and Feature nodes
 - **Relationships**: MANUFACTURED_BY, HAS_BODY_TYPE, USES_FUEL, HAS_FEATURE
-- **Purpose**: Enables intelligent retrieval of car information during conversations
+- **Purpose**: Real-time car information retrieval during conversations via Graph RAG
 
 ### 3. **Voice Conversation Pipeline**
 ```
@@ -275,6 +275,27 @@ model User {
 (Vehicle)-[:HAS_FEATURE]->(Feature)
 ```
 
+## 🧠 Graph RAG in Action
+
+### **Real-time Car Query Processing**
+During any conversation, when users mention or ask about car details:
+
+```cypher
+// Example: User asks "What's the mileage of my Tata Nexon?"
+MATCH (v:Vehicle {manufacturer: "Tata", model_name: "Nexon"})
+RETURN v.mileage_kmpl, v.fuel_type, v.variant_name
+
+// Example: "Which cars have 5-star safety rating?"
+MATCH (v:Vehicle {safety_rating: "5 Star"})
+RETURN v.manufacturer, v.model_name, v.variant_name
+```
+
+The Neo4j Graph RAG enables:
+- **Instant Answers**: Sub-second response to car specification queries
+- **Contextual Understanding**: Links between manufacturers, models, features
+- **Complex Queries**: Multi-attribute searches across 200+ car models
+- **Personalized Responses**: Based on user's specific car variant
+
 ## 🎯 Agent Conversation Flow
 
 ### **1. Language Selection**
@@ -292,12 +313,21 @@ English: "Hello! This is Priya from SecureWheels Insurance.
 - Specific car model details
 - Current insurance status
 
-### **3. Intelligent Car Information Retrieval**
-The agent uses the Neo4j Graph RAG to:
-- Identify user's car from conversation
-- Retrieve relevant specifications
-- Provide personalized insurance recommendations
-- Answer technical questions about their vehicle
+### **3. Real-time Car Information Retrieval (Graph RAG)**
+**Mid-conversation**, whenever users ask about car details, the agent:
+- Queries the Neo4j Graph Database in real-time
+- Retrieves specific car specifications, features, and pricing
+- Provides instant answers about mileage, engine specs, safety ratings
+- Offers personalized insurance recommendations based on car data
+- Handles complex queries like "What's the mileage of Tata Nexon XZ variant?"
+
+**Example Mid-Conversation:**
+```
+User: "I have a Tata Nexon. What's its mileage?"
+Agent: *Queries Neo4j Graph DB*
+Agent: "The Tata Nexon offers excellent mileage! The petrol variant gives 17.57 kmpl 
+        while the diesel variant delivers 21.99 kmpl. Which variant do you have?"
+```
 
 ### **4. Lead Qualification & Booking**
 - Assess customer interest (1-10 score)
