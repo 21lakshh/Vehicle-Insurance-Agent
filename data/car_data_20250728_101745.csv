@@ -1,0 +1,21 @@
+manufacturer,model_name,variant_name,manufacturing_year,showroom_price,fuel_type,engine_capacity_cc,body_type,seating_capacity,transmission,power_bhp,torque_nm,mileage_kmpl,safety_rating,features
+Lotus,Eletre,Eletre,2025,₹2.55 - 2.99 Cr,Electric,,SUV,5,Automatic,603 bhp,,,,"Electric, Automatic, 600 km range, 112 kWh battery"
+Lotus,Emira,Emira,2025,₹3.22 Cr,Petrol,1998,Coupe,,Manual/Automatic,400 bhp,,,,
+Lotus,Emeya,Emeya,2025,₹2.34 Cr,Electric,,Sedan,5,Automatic,594.71 bhp,,,,"Electric, Automatic, 610 km range"
+Honda,City,City,2025,₹12.38 - 16.65 Lakh,Petrol,1498,Sedan,5,Manual/Automatic,119.35 bhp,119.35 bhp,18.4 kmpl,4 Star,Facelift
+Honda,Amaze,Amaze,2025,₹8.10 - 11.20 Lakh,Petrol,1199,Sedan,5,Manual/Automatic,89 bhp,89 bhp,19.46 kmpl,5 Star,
+Honda,Elevate,Elevate,2025,₹11.91 - 16.83 Lakh,Petrol,1498,SUV,5,Manual/Automatic,119 bhp,119 bhp,16.92 kmpl,,Facelift
+Honda,City Hybrid,City Hybrid,2025,₹19.90 Lakh,Hybrid,1498,Sedan,5,Automatic,96.55 bhp,96.55 bhp,27.13 kmpl,,
+Honda,Amaze 2nd Gen,Amaze 2nd Gen,2025,₹7.20 - 9.96 Lakh,Petrol,1199,Sedan,5,Manual/Automatic,88.5 bhp,88.5 bhp,18.6 kmpl,2 Star,
+Toyota,Fortuner,Fortuner,2025,₹36.05 - 52.34 Lakh,Diesel/Petrol,2755,SUV,5,Manual/Automatic,201.15 bhp,420 Nm,11 kmpl,5 Star,Facelift
+Toyota,Innova Crysta,Innova Crysta,2025,₹19.99 - 27.08 Lakh,Diesel,2393,MUV,5,Manual,147.51 bhp,360 Nm,9 kmpl,5 Star,
+Toyota,Urban Cruiser Hyryder,Urban Cruiser Hyryder,2025,₹11.34 - 19.99 Lakh,Petrol/CNG,1490,SUV,5,Manual/Automatic,101.64 bhp,136 Nm,27.97 kmpl,4 Star,
+Toyota,Hilux,Hilux,2025,₹30.40 - 37.90 Lakh,Diesel,2755,Pickup Truck,5,Manual/Automatic,201.15 bhp,420 Nm,10 kmpl,5 Star,
+Toyota,Land Cruiser 300,Land Cruiser 300,2025,₹2.31 - 2.41 Cr,Diesel/Petrol,3346,SUV,5,Automatic,304.41 bhp,650 Nm,11 kmpl,5 Star,Facelift
+Toyota,Camry,Camry,2025,₹48.50 Lakh,Petrol,2487,Sedan,5,Automatic,227 bhp,221 Nm,25.49 kmpl,,
+Toyota,Glanza,Glanza,2025,₹6.90 - 10 Lakh,Petrol/CNG,1197,Hatchback,5,Manual/Automatic,88.5 bhp,113 Nm,22.94 kmpl,,
+Toyota,Innova Hycross,Innova Hycross,2025,₹19.14 - 32.58 Lakh,Petrol,1987,MUV,7,Automatic,183.72 bhp,187 Nm,23.24 kmpl,,
+Toyota,Vellfire,Vellfire,2025,₹1.22 - 1.32 Cr,Petrol,2487,MUV,5,Automatic,190.42 bhp,356 Nm,16 kmpl,,
+Toyota,Taisor,Taisor,2025,₹7.76 - 13.06 Lakh,Petrol/CNG,1197,Hatchback,5,Manual/Automatic,98.69 bhp,103 Nm,22.8 kmpl,,
+Toyota,Rumion,Rumion,2025,₹10.66 - 13.96 Lakh,Petrol/CNG,1462,MUV,5,Manual/Automatic,101.64 bhp,136 Nm,20.51 kmpl,5 Star,
+Toyota,Fortuner Legender,Fortuner Legender,2025,₹44.51 - 50.09 Lakh,Diesel,2755,SUV,5,Manual/Automatic,201.15 bhp,420 Nm,10.52 kmpl,5 Star,
