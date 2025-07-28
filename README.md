@@ -4,6 +4,7 @@ A sophisticated bilingual (Hindi/English) AI voice agent built with **LiveKit** 
 
 ![Graph Visualization 1](./public/graph1.png)
 ![Graph Visualization 2](./public/graph2.png)
+![Graph Visualization 3](./public/graph3.png)
 
 ## 🌟 Features
 
@@ -104,6 +105,7 @@ tts=sarvam.TTS(
 
 ### **AI & Voice Processing**
 - **LiveKit Agents**: Voice conversation framework
+- **Vapi Integration**: Voice AI platform for enhanced conversation capabilities
 - **Sarvam STT**: Speech-to-Text using Saarika v2.5 model (Hindi/English)
 - **Sarvam TTS**: Text-to-Speech using Anushka voice (Hindi/English)
 - **Google Gemini 2.5 Flash**: Large Language Model for conversation generation
@@ -306,3 +308,4 @@ The project includes Neo4j graph visualizations showing:
 
 1. **Graph Structure** (`graph1.png`): Overall node relationships and data model
 2. **Vehicle Connections** (`graph2.png`): How vehicles connect to features, manufacturers, and specifications
+3. **Advanced Graph Analysis** (`graph3.png`): Extended graph relationships and data insights
