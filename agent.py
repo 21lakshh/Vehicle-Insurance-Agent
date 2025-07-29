@@ -143,32 +143,23 @@ Silently track during conversation:
             "Content-Type": "application/json",
         }
         
-        try:
-            print(f"[DEBUG] Sending request to: {url}")
-            print(f"[DEBUG] Data: {context_variables}")
+        
+        print(f"[DEBUG] Sending request to: {url}")
+        print(f"[DEBUG] Data: {context_variables}")
             
-            response = requests.post(url, headers=headers, json=context_variables, timeout=30)
+        response = requests.post(url, headers=headers, json=context_variables, timeout=30)
             
-            print(f"[DEBUG] Response status: {response.status_code}")
-            print(f"[DEBUG] Response text: {response.text}")
+        print(f"[DEBUG] Response status: {response.status_code}")
+        print(f"[DEBUG] Response text: {response.text}")
             
-            if response.status_code == 200:
+        if response.status_code == 200:
                 result = response.json()
                 print(f"[DEBUG] Success! Response: {result}")
                 return {"status": "success", "data": result, "message": "User details sent successfully"}
-            else:
+        else:
                 error_msg = f"API returned status {response.status_code}: {response.text}"
                 print(f"[ERROR] {error_msg}")
                 return {"status": "error", "message": error_msg}
-                
-        except requests.exceptions.RequestException as e:
-            error_msg = f"Network error occurred: {str(e)}"
-            print(f"[ERROR] {error_msg}")
-            return {"status": "error", "message": error_msg}
-        except Exception as e:
-            error_msg = f"Unexpected error occurred: {str(e)}"
-            print(f"[ERROR] {error_msg}")
-            return {"status": "error", "message": error_msg}
 
 
 async def entrypoint(ctx: agents.JobContext):
