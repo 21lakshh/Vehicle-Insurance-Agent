@@ -1,12 +1,12 @@
 from dotenv import load_dotenv
 import json
 import requests
+from typing import Dict, Any
 
-base_url = "https://localhost:3000" # local host
-
+from base_url import base_url
 
 from livekit import agents
-from livekit.agents import AgentSession, Agent, RoomInputOptions
+from livekit.agents import AgentSession, Agent, RoomInputOptions, function_tool
 from livekit.plugins import (
     noise_cancellation,
     silero,
@@ -14,12 +14,14 @@ from livekit.plugins import (
     google
     )
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
+import requests
+from datetime import datetime
 
 load_dotenv()
 
-
-class Assistant(Agent):
-    def __init__(self) -> None:
+class VehicleInsuranceAgent(Agent):
+    def __init__(self, context_variables: Dict[str, Any]) -> None:
+        self.context_variables = context_variables
         super().__init__(instructions="""
 [Identity]  
 You are Priya, a friendly vehicle insurance specialist from SecureWheels Insurance. You speak both Hindi and English fluently. Your goal is to qualify leads and book appointments through natural conversation.
@@ -32,6 +34,7 @@ You are Priya, a friendly vehicle insurance specialist from SecureWheels Insuran
 5. Book appointments for qualified leads
 6. Ask for additional questions before ending
 7. End conversation when customer has no more questions
+8. MUST call send_user_details({context_variables}) function with complete context after gathering all information
 
 [Language Rules]  
 - Ask language preference first: Hindi or English
@@ -84,12 +87,39 @@ When customer indicates no more questions or says goodbye:
 Hindi: "धन्यवाद [नाम] जी! बात करके अच्छा लगा। हम जल्दी contact करेंगे। नमस्ते!"
 English: "Thank you [Name]! It was great talking with you. We'll be in touch soon. Have a great day!"
 
+[Context Management - CRITICAL]
+Throughout the conversation, continuously update the user context with the following information:
+- name: Customer's full name (this should be in string)
+- preferredlanguage: "Hindi" or "English" based on customer choice (this should be in string)
+- interestScore: Rate interest level from 1-10 based on customer responses (this should be in float and no string)
+- Sentiment: "Positive", "Neutral", or "Negative" based on customer tone (this should be in string)
+- phoneNumber: Customer's contact number (this should be in string)
+- callduration: Track conversation duration (automatic) (this should be in seconds and no floating value and no string)
+- car_details: JSON string format: "{\"manufacturer\": \"[brand]\", \"model\": \"[model]\", \"variant\": \"[variant]\", \"year\": \"[year]\"}" (this should be in string)
+
+[Function Calling Rules - MANDATORY]
+1. After gathering ALL essential information (name, phone, vehicle details, language preference)
+2. Before asking final questions (step 7)
+3. MUST call send_user_details(context_variables) function with the complete updated context
+4. Only proceed to final questions and conversation ending AFTER successfully calling the function
+5. If context is incomplete, continue gathering missing information before calling function
+
+EXAMPLE of properly formatted context_variables for function call:
+{
+    "name": "Rahul Sharma", (this should be in string)
+    "preferredlanguage": "Hindi", (this should be in string)
+    "interestScore": 8.0, (this should be in float and no string)
+    "Sentiment": "Positive", (this should be in string)
+    "phoneNumber": "9876543210", (this should be in string)
+    "callduration": 300, (this should be in seconds and no floating value and no string)
+    "car_details": "{\"manufacturer\": \"Maruti\", \"model\": \"Swift\", \"variant\": \"VXI\", \"year\": \"2021\"}" (this should be in string)
+}
 
 [Data Collection - Internal Only]
 Silently track during conversation:
 - Name, language preference, phone number
 - Interest level (1-10), sentiment (Positive/Neutral/Negative)
-- Vehicle manufacturer, model, variant, year
+- Vehicle manufacturer, model, variant, year (format as JSON string for car_details)
 - Call duration (automatic)
 
 [Guidelines]
@@ -99,12 +129,62 @@ Silently track during conversation:
 - Never mention data collection to customer
 - Focus on lead qualification, not immediate sales
 - ALWAYS ask for additional questions before ending
+- MANDATORY: Call send_user_details(context_variables) function before ending conversation
 """)
+        
+    @function_tool
+    async def send_user_details(self, context_variables: Dict[str, Any]): 
+
+        callduration = datetime.now() - self.context_variables["callduration"]
+        context_variables["callduration"] = int(callduration.total_seconds())
+        """Send the gathered user details to the backend after collecting all necessary information during the conversation."""
+        url = f"{base_url}/api/user/create"
+        headers = {
+            "Content-Type": "application/json",
+        }
+        
+        try:
+            print(f"[DEBUG] Sending request to: {url}")
+            print(f"[DEBUG] Data: {context_variables}")
+            
+            response = requests.post(url, headers=headers, json=context_variables, timeout=30)
+            
+            print(f"[DEBUG] Response status: {response.status_code}")
+            print(f"[DEBUG] Response text: {response.text}")
+            
+            if response.status_code == 200:
+                result = response.json()
+                print(f"[DEBUG] Success! Response: {result}")
+                return {"status": "success", "data": result, "message": "User details sent successfully"}
+            else:
+                error_msg = f"API returned status {response.status_code}: {response.text}"
+                print(f"[ERROR] {error_msg}")
+                return {"status": "error", "message": error_msg}
+                
+        except requests.exceptions.RequestException as e:
+            error_msg = f"Network error occurred: {str(e)}"
+            print(f"[ERROR] {error_msg}")
+            return {"status": "error", "message": error_msg}
+        except Exception as e:
+            error_msg = f"Unexpected error occurred: {str(e)}"
+            print(f"[ERROR] {error_msg}")
+            return {"status": "error", "message": error_msg}
 
 
 async def entrypoint(ctx: agents.JobContext):
-    assistant = Assistant()
+    # Define context variables before creating agent
+    context_variables = {
+        "name": "",
+        "preferredlanguage": "",
+        "interestScore": "",
+        "Sentiment": "",
+        "phoneNumber": "",
+        "callduration": "",
+        "car_details": "",
+    }
     
+    vehicle_insurance_assistant = VehicleInsuranceAgent(context_variables)
+
     session = AgentSession(
         stt=sarvam.STT(
             language="hi-IN",
@@ -121,12 +201,14 @@ async def entrypoint(ctx: agents.JobContext):
 
     await session.start(
         room=ctx.room, # livekit room address for communication
-        agent=assistant,
+        agent=vehicle_insurance_assistant, 
         room_input_options=RoomInputOptions(
             # LiveKit Cloud enhanced noise cancellation for telephony applications
             noise_cancellation=noise_cancellation.BVC(), 
         ),
     )
+
+    context_variables["callduration"] = datetime.now()
 
     await ctx.connect() # connect to livekit room for communication
 
@@ -137,6 +219,7 @@ async def entrypoint(ctx: agents.JobContext):
         मैं आपको vehicle insurance के बारे में कुछ बहुत अच्छी जानकारी देना चाहती हूँ।
         """
     )
+
 
 
 if __name__ == "__main__":
